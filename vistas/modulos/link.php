@@ -18,3 +18,4 @@
     <link rel="stylesheet" href="<?php echo SERVERURL;?>vistas/css/icomoon.css">
     <link rel="stylesheet" href="<?php echo SERVERURL;?>vistas/css/style.css">
     <link rel="stylesheet" href="<?php echo SERVERURL;?>vistas/css/sweetalert2.css">
+    

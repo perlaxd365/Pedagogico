@@ -31,8 +31,9 @@
 
     if ($vistasR=="home"|| $vistasR=="404"){
       if ($vistasR=="home") {
+        $var=SERVERURL;
 
-        require_once"./vistas/contenidos/login-view.php";
+        echo "<script>window.location.href = '".$var."home';</script>";
 
       }else{
         require_once"./vistas/contenidos/404-view.php";

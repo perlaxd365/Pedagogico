@@ -444,6 +444,8 @@ class documentoControlador extends documentoModelo{
 				<td>'.$rows['especialidad'].'</td>
 				<td>';
 				$path ="././vistas/images/fotoportada/".$rows['id_documento'];
+				$pathDelete =".././vistas/images/fotoportada/".$rows['id_documento'];
+				$pdfDelete =".././vistas/images/pdf/".$rows['id_documento'];
 				if(file_exists($path)){
 					$directorio = opendir($path);
 					while ($archivo = readdir($directorio))
@@ -480,6 +482,8 @@ class documentoControlador extends documentoModelo{
 				<td>
 				<form action="'.SERVERURL.'/ajax/documento.php" method="POST" class="FormularioAjax" data-form="delete" entype="multipart/form-data" autocomplete="off">
 				<input type="hidden" value="'.mainModel::encryption($rows['id_investigacion']).'" name="id_documento_del">
+				<input type="hidden" value="'.$pathDelete.'" name="pathDelete">
+				<input type="hidden" value="'.$pdfDelete.'" name="pdfDelete">
 				<input type="submit" class="btn btn-warning" value="Eliminar">
 				<div class="RespuestaAjax"></div>
 				</form>
@@ -872,8 +876,30 @@ public function actualizar_documento_controlador(){
 public function eliminar_documento_controlador(){
 
 	$id_documento=mainModel::decryption($_POST['id_documento_del']);
+	$carpeta=$_POST['pathDelete'];
+	$pdf=$_POST['pdfDelete'];
 	$eliminar=documentoModelo::desactivar_investigacion_modelo($id_documento);
+	
 	if ($eliminar->rowCount()>=1) {
+
+		foreach(glob($carpeta . "/*") as $archivos_carpeta){             
+			if (is_dir($archivos_carpeta)){
+			  rmDir_rf($archivos_carpeta);
+			} else {
+			unlink($archivos_carpeta);
+			}
+		  }
+		  rmdir($carpeta);
+
+		  foreach(glob($pdf . "/*") as $archivos_carpeta){             
+			  if (is_dir($archivos_carpeta)){
+				rmDir_rf($archivos_carpeta);
+			  } else {
+			  unlink($archivos_carpeta);
+			  }
+			}
+			rmdir($pdf);
+
 		$alerta=[
 			"Alerta"=>"recargar",
 			"Titulo"=>"Datos Eliminador",
